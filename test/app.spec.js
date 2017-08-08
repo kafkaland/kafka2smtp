@@ -8,16 +8,26 @@ const client = new kafkaNode.Client();
 const producer = new Producer(client, [{topic: 'test'}]);
 
 
-// describe('Component Tests', function () {
-//
-//   before(function (done) {
-//     producer.on('ready', () => {
-//       producer.createTopics(['test'], true, done);
-//     })
-//   });
-//
-//   if ('should get a message and send to smtp', function (done) {
-//       producer.send(message, noop);
-//
-//     });
-// });
+describe('Component Tests', function () {
+
+  before(function (done) {
+    producer.on('ready', () => {
+      producer.createTopics(['test'], true, done);
+    })
+  });
+
+  it('should get a message and send to smtp', function (done) {
+    app(function (err, info) {
+      console.log("=======");
+      console.log(err);
+      console.log(info);
+      done();
+    });
+
+    var m = {to:'asd', text:'asd', subject:'123'};
+    var message = [{topic: 'test', messages: [JSON.stringify(m)]}];
+    producer.send(message, noop);
+  });
+});
+const noop = (err, data) => {
+};

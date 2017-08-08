@@ -1,17 +1,22 @@
 const consumer = require('./kafka').createConsumer();
 var smtp = require('./smtp');
 
-function up() {
+const run = module.exports = function (cb) {
   consumer.on('message', function (message) {
-    const payload = message.payload;
-    smtp.createClient().sendEmail(payload.to, payload.subject, payload.text, (err) => {
+    console.log(`New message: ${message}`);
+    console.log(message);
+    console.log(message.value);
+    const payload = message.value;
+    smtp.createClient().sendEmail(payload.to, payload.subject, payload.text, (err, info) => {
       if (err) {
         console.log(err);
+        cb && cb(err);
       } else {
         console.log('Message was sent');
+        cb(null, info);
       }
     })
   });
-};
+}
 
-up();
+!module.parent ? run() : null;
