@@ -14,6 +14,7 @@ const consumer = new kafkaNode.Consumer(
 /**
  * init smtp client
  */
+
 const FROM = 'admin@localhost';
 const smtp = nodemailer.createTransport({
   host: 'localhost',
