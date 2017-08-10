@@ -1,2 +1,2 @@
 # kafka2smtp
-Kafka to SMTP adapter
+Kafka to SMTP proxy service.

@@ -1,7 +1,7 @@
+require('./index');
 const assert = require('chai').assert;
-const app = require('../src/app');
 const kafkaNode = require('kafka-node');
-const MailDev = require('maildev')
+const MailDev = require('maildev');
 
 // create producer
 const Producer = kafkaNode.Producer;
