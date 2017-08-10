@@ -2,7 +2,8 @@ const nodemailer = require('nodemailer');
 
 const config = {
   host: 'localhost',
-  port: 25
+  port: 1025,
+  ignoreTLS: true,
 };
 
 const from = 'admin@localhost';
