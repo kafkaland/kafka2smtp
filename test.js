@@ -18,7 +18,7 @@ describe('Component Tests', function () {
 
   before(function (done) {
     producer.on('ready', () => {
-      producer.createTopics(['test'], () -> {
+      producer.createTopics(['test'], () => {
         require('./index'); // start flow when topic is created
         done();
       });
