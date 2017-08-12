@@ -1,4 +1,3 @@
-require('./index');
 const assert = require('chai').assert;
 const kafkaNode = require('kafka-node');
 const MailDev = require('maildev');
@@ -6,7 +5,7 @@ const MailDev = require('maildev');
 // create producer
 const Producer = kafkaNode.Producer;
 const client = new kafkaNode.Client();
-const producer = new Producer(client, [{topic: 'test'}]);
+const producer = new Producer(client);
 
 // create mail server
 const maildev = new MailDev();
@@ -19,7 +18,10 @@ describe('Component Tests', function () {
 
   before(function (done) {
     producer.on('ready', () => {
-      producer.createTopics(['test'], true, done);
+      producer.createTopics(['test'], () -> {
+        require('./index'); // start flow when topic is created
+        done();
+      });
     })
   });
 
