@@ -8,6 +8,7 @@ before_install:
   --env ADVERTISED_PORT=9092
   --name kafka
   spotify/kafka
+- npm install -g mocha
 
 services:
   - docker
