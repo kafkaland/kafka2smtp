@@ -2,12 +2,8 @@ const assert = require('chai').assert;
 const kafkaNode = require('kafka-node');
 const MailDev = require('maildev');
 
-// create producer
-const Producer = kafkaNode.Producer;
-const client = new kafkaNode.Client();
-const producer = new Producer(client);
-
-// create mail server
+const TOPIC = 'email';
+const producer = new kafkaNode.Producer(new kafkaNode.Client());
 const maildev = new MailDev();
 
 describe('Component Tests', function () {
@@ -18,8 +14,8 @@ describe('Component Tests', function () {
 
   before(function (done) {
     producer.on('ready', () => {
-      producer.createTopics(['test'], () => {
-        require('./index'); // start flow when topic is created
+      producer.createTopics([TOPIC], () => {
+        require('./index'); // start the flow when a topic is created
         done();
       });
     })
@@ -29,7 +25,7 @@ describe('Component Tests', function () {
     producer.close(done);
   });
 
-  it('should get a message and send to smtp', function (done) {
+  it('should work like a boss', function (done) {
 
     // arrange & assert
     maildev.on('new', function (email) {
@@ -39,12 +35,10 @@ describe('Component Tests', function () {
     });
 
     // act
-    var m = {to: 'test@local.com', text: 'How are you?', subject: 'Hello Test'};
-    var message = [{topic: 'test', messages: [JSON.stringify(m)]}];
-    producer.send(message, noop);
+    const m = {to: 'test@local.com', text: 'How are you?', subject: 'Hello Test'};
+    const message = [{topic: TOPIC, messages: [JSON.stringify(m)]}];
+    producer.send(message, ()=> {});
+
   });
 });
 
-const noop = (err, data) => {
-  console.log(err);
-};

@@ -1,13 +1,18 @@
 const kafkaNode = require('kafka-node');
 const nodemailer = require('nodemailer');
 
+const TOPIC = 'email';
+const HOST = 'localhost';
+const PORT = 1025;
+const FROM = 'admin@localhost';
+
 /**
  * init kafka consumer
  */
 
 const consumer = new kafkaNode.Consumer(
   new kafkaNode.Client(),
-  [{topic: 'test'}],
+  [{topic: TOPIC}],
   {autoCommit: true}
 );
 
@@ -15,10 +20,9 @@ const consumer = new kafkaNode.Consumer(
  * init smtp client
  */
 
-const FROM = 'admin@localhost';
 const smtp = nodemailer.createTransport({
-  host: 'localhost',
-  port: 1025,
+  host: HOST,
+  port: PORT,
   ignoreTLS: true,
 });
 
@@ -31,7 +35,7 @@ consumer.on('message', function (message) {
 
   const payload = JSON.parse(message.value);
   const email = {
-    from: FROM,
+    from: payload.from || FROM,
     to: payload.to,
     subject: payload.subject,
     text: payload.text
