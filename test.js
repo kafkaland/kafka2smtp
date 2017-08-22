@@ -1,6 +1,7 @@
 const assert = require('chai').assert;
 const kafkaNode = require('kafka-node');
 const MailDev = require('maildev');
+require('pretty-error').start();
 
 const TOPIC = 'email';
 const producer = new kafkaNode.Producer(new kafkaNode.Client());

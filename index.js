@@ -7,7 +7,7 @@ const PORT = 1025;
 const FROM = 'admin@localhost';
 
 /**
- * init kafka consumer
+ * IN: kafka consumer
  */
 
 const consumer = new kafkaNode.Consumer(
@@ -17,7 +17,7 @@ const consumer = new kafkaNode.Consumer(
 );
 
 /**
- * init smtp client
+ * OUT: SMTP client
  */
 
 const smtp = nodemailer.createTransport({
@@ -27,11 +27,10 @@ const smtp = nodemailer.createTransport({
 });
 
 /**
- * Flow
+ * I'm in Position
  */
 
 consumer.on('message', function (message) {
-  console.log(message.value);
 
   const payload = JSON.parse(message.value);
   const email = {
@@ -41,11 +40,9 @@ consumer.on('message', function (message) {
     text: payload.text
   };
 
-  smtp.sendMail(email, (err, info) => {
+  smtp.sendMail(email, (err) => {
     if (err) {
       console.log(err);
-    } else {
-      console.log(info);
     }
   })
 });
